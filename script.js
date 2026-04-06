@@ -65,6 +65,11 @@ function checkWin(board,player){
  function bestSpot(){
     return emptySquares()[0]
  }
+//  Random posstion function
+//  function randomSpot(){
+//     let emptyArr = emptySquares()
+//     return emptyArr[Math.floor(Math.random() * emptyArr.length)];
+//  }
 
  function emptySquares(){
     return originalBoard.filter(s => typeof s == 'number')
