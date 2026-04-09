@@ -42,7 +42,6 @@ function checkWin(board,player){
             break;
         }
     }
-    console.log(gameWon)
     return gameWon
 }
 
@@ -63,8 +62,13 @@ function checkWin(board,player){
  }
 
  function bestSpot(){
-    return emptySquares()[0]
+    return minimax(originalBoard,ai).index
  }
+
+ 
+//  function simpleBestSpot(){
+//     return emptySquares()[0]
+//  }
 //  Random posstion function
 //  function randomSpot(){
 //     let emptyArr = emptySquares()
@@ -87,3 +91,54 @@ function checkWin(board,player){
     }
     return false
  }
+
+ function minimax(newBoard,player){
+    var availSpots = emptySquares(newBoard);
+
+    if (checkWin(newBoard,player)){
+        return {score: -10};
+    } else if (checkWin(newBoard,ai)){
+        return {score: 10};
+    }else if(availSpots.length === 0){
+        return {score:0};
+    }
+    var moves = [];
+    for (var i =0; i < availSpots.length; i++){
+        var move = {};
+        move.index = newBoard[availSpots[i]];
+        newBoard[availSpots[i]] = player;
+
+        if (player == ai){
+            var result = minimax(newBoard, human);
+            move.score = result.score;   
+        }else{
+            var result = minimax(newBoard, ai);
+            move.score = result.score; 
+        }
+
+        newBoard[availSpots[i]] = move.index;
+
+        moves.push(move);
+    }
+
+    var bestMove;
+    if (player === ai){
+        var bestScore = -10000;
+        for( var i = 0; i<moves.length;i++){
+            if (moves[i].score > bestScore){
+                bestScore = moves[i].score;
+                bestMove = i;
+            }
+        }
+    } else{
+        var bestScore = 10000;
+        for( var i = 0; i<moves.length;i++){
+            if (moves[i].score < bestScore){
+                bestScore = moves[i].score;
+                bestMove = i;
+            }
+        }
+    }
+    return moves[bestMove];
+ }
+ 
